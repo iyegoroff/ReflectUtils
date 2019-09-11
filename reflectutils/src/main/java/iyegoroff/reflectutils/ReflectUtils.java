@@ -17,10 +17,26 @@ public class ReflectUtils {
     return getFieldValue(target, name, TAG);
   }
 
-  @SuppressWarnings({"unchecked", "WeakerAccess"})
-  public static @Nullable <T> T getFieldValue(@NonNull Object target, String name, String logTag) {
-    Class<?> type = target.getClass();
+  public static @Nullable <T> T getFieldValue(
+    @NonNull Class<?> type,
+    @NonNull Object target,
+    String name
+  ) {
+    return getFieldValue(type, target, name, TAG);
+  }
 
+  @SuppressWarnings("WeakerAccess")
+  public static @Nullable <T> T getFieldValue(@NonNull Object target, String name, String logTag) {
+    return getFieldValue(target.getClass(), target, name, logTag);
+  }
+
+  @SuppressWarnings({"unchecked", "WeakerAccess"})
+  public static @Nullable <T> T getFieldValue(
+    @NonNull Class<?> type,
+    @NonNull Object target,
+    String name,
+    String logTag
+  ) {
     try {
       Field field = type.getDeclaredField(name);
       field.setAccessible(true);
@@ -39,10 +55,33 @@ public class ReflectUtils {
     setFieldValue(target, name, value, TAG);
   }
 
-  @SuppressWarnings("WeakerAccess")
-  public static <T> void setFieldValue(@NonNull Object target, String name, T value, String logTag) {
-    Class<?> type = target.getClass();
+  public static <T> void setFieldValue(
+    @NonNull Class<?> type,
+    @NonNull Object target,
+    String name,
+    T value
+  ) {
+    setFieldValue(type, target, name, value, TAG);
+  }
 
+  @SuppressWarnings("WeakerAccess")
+  public static <T> void setFieldValue(
+    @NonNull Object target,
+    String name,
+    T value,
+    String logTag
+  ) {
+    setFieldValue(target.getClass(), target, name, value, logTag);
+  }
+
+  @SuppressWarnings("WeakerAccess")
+  public static <T> void setFieldValue(
+    @NonNull Class<?> type,
+    @NonNull Object target,
+    String name,
+    T value,
+    String logTag
+  ) {
     try {
       Field field = type.getDeclaredField(name);
       field.setAccessible(true);
@@ -58,10 +97,26 @@ public class ReflectUtils {
     return invokeMethod(target, name, TAG);
   }
 
-  @SuppressWarnings({"unchecked", "WeakerAccess"})
-  public static @Nullable <T> T invokeMethod(@NonNull Object target, String name, String logTag) {
-    Class<?> type = target.getClass();
+  public static @Nullable <T> T invokeMethod(
+    @NonNull Class<?> type,
+    @NonNull Object target,
+    String name
+  ) {
+    return invokeMethod(type, target, name, TAG);
+  }
 
+  @SuppressWarnings("WeakerAccess")
+  public static @Nullable <T> T invokeMethod(@NonNull Object target, String name, String logTag) {
+    return invokeMethod(target.getClass(), target, name, logTag);
+  }
+
+  @SuppressWarnings({"unchecked", "WeakerAccess"})
+  public static @Nullable <T> T invokeMethod(
+    @NonNull Class<?> type,
+    @NonNull Object target,
+    String name,
+    String logTag
+  ) {
     try {
       Method method = type.getDeclaredMethod(name);
       method.setAccessible(true);
