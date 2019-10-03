@@ -158,9 +158,10 @@ public class ReflectUtils {
   public static @Nullable <T> T invokeMethod(
     @NonNull String className,
     @NonNull Object target,
-    @NonNull String name
+    @NonNull String name,
+    Object... args
   ) {
-    return invokeMethod(className, target, name, TAG);
+    return invokeMethod(className, target, name, TAG, args);
   }
 
   @SuppressWarnings("WeakerAccess")
@@ -168,10 +169,11 @@ public class ReflectUtils {
     @NonNull String className,
     @NonNull Object target,
     @NonNull String name,
-    @NonNull String logTag
+    @NonNull String logTag,
+    Object... args
   ) {
     try {
-      return invokeMethod(Class.forName(className), target, name, TAG);
+      return invokeMethod(Class.forName(className), target, name, TAG, args);
 
     } catch (ClassNotFoundException e) {
       Log.w(logTag, "Can't find " + className + " class");
@@ -182,25 +184,31 @@ public class ReflectUtils {
     return null;
   }
 
-  public static @Nullable <T> T invokeMethod(@NonNull Object target, @NonNull String name) {
-    return invokeMethod(target, name, TAG);
+  public static @Nullable <T> T invokeMethod(
+    @NonNull Object target,
+    @NonNull String name,
+    Object... args
+  ) {
+    return invokeMethod(target, name, TAG, args);
   }
 
   public static @Nullable <T> T invokeMethod(
     @NonNull Class<?> type,
     @NonNull Object target,
-    @NonNull String name
+    @NonNull String name,
+    Object... args
   ) {
-    return invokeMethod(type, target, name, TAG);
+    return invokeMethod(type, target, name, TAG, args);
   }
 
   @SuppressWarnings("WeakerAccess")
   public static @Nullable <T> T invokeMethod(
     @NonNull Object target,
     @NonNull String name,
-    @NonNull String logTag
+    @NonNull String logTag,
+    Object... args
   ) {
-    return invokeMethod(target.getClass(), target, name, logTag);
+    return invokeMethod(target.getClass(), target, name, logTag, args);
   }
 
   @SuppressWarnings({"unchecked", "WeakerAccess"})
@@ -208,13 +216,15 @@ public class ReflectUtils {
     @NonNull Class<?> type,
     @NonNull Object target,
     @NonNull String name,
-    @NonNull String logTag
+    @NonNull String logTag,
+    Object... args
   ) {
     try {
       Method method = type.getDeclaredMethod(name);
       method.setAccessible(true);
 
-      return (T) method.invoke(target);
+      //noinspection JavaReflectionInvocation
+      return (T) method.invoke(target, args);
 
     } catch (Exception e) {
       Log.w(logTag, "Can't invoke " + type.getName() + " method " + name);
